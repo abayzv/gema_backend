@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Http\Requests\UserRequest;
+use App\Models\MailActivators;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -49,6 +52,14 @@ class UserController extends Controller
     {
         //
     }
+    public function mailactivate(Request $request)
+    {
+        dd($request->all());
+        $getToken = MailActivators::where(['name' => $request->name, 'token' => $request->token])->get();
+        if ($getToken) {
+            User::where('name', $request->name)->update(['email_verified_at' => Carbon::now()->toDateTimeString()]);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -80,7 +91,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('pages.dashboard.user.edit',[
+        return view('pages.dashboard.user.edit', [
             'item' => $user
         ]);
     }
@@ -95,7 +106,7 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         $data = $request->all();
-        
+
         $user->update($data);
 
         return redirect()->route('dashboard.user.index');

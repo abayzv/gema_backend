@@ -9,6 +9,11 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\MyTransactionController;
 use App\Http\Controllers\ProductGalleryController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Models\MailActivators;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +27,7 @@ use App\Http\Controllers\ProductCategoryController;
 */
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
-   
+
     Route::name('dashboard.')->prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
 
@@ -40,4 +45,16 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
             ]);
         });
     });
+});
+
+Route::get('mailactivate', function (Request $request) {
+
+    $getToken = MailActivators::where(['name' => $request->name, 'token' => $request->token])->first();
+    // dd($getToken);
+    if ($getToken) {
+        User::where('email', $request->name)->update(['email_verified_at' => Carbon::now()->toDateTimeString()]);
+        return redirect('https://gemaindonesia.id');
+    } else {
+        return redirect('https://gemaindonesia.id');
+    }
 });

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionItemsTable extends Migration
+class CreateMailActivatorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateTransactionItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction_items', function (Blueprint $table) {
+        Schema::create('mail_activators', function (Blueprint $table) {
             $table->id();
-
-            $table->bigInteger('users_id');
-            $table->bigInteger('products_id');
-            $table->bigInteger('transactions_id');
-            $table->bigInteger('quantity');
-
+            $table->string('name');
+            $table->string('token');
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateTransactionItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction_items');
+        Schema::dropIfExists('mail_activators');
     }
 }

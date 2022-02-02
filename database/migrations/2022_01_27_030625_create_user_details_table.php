@@ -22,13 +22,13 @@ class CreateUserDetailsTable extends Migration
             $table->string('districts');
             $table->string('region');
             $table->integer('post_code');
-            $table->tinyInteger('id_card_number');
+            $table->string('id_card_number');
             $table->string('id_card_path');
             $table->string('selfie_path');
-            $table->tinyInteger('npwp_number');
+            $table->string('npwp_number');
             $table->string('npwp_path');
             $table->string('account_name');
-            $table->tinyInteger('account_number');
+            $table->string('account_number');
             $table->string('bank_name');
             $table->timestamps();
         });

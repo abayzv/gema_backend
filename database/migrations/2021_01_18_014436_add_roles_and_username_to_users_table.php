@@ -15,7 +15,7 @@ class AddRolesAndUsernameToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('roles')->after('email')->default('USER');
-            $table->string('username')->after('email')->nullable();
+            // $table->string('username')->after('email')->nullable();
         });
     }
 
@@ -27,8 +27,8 @@ class AddRolesAndUsernameToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('roles');
-            $table->dropColumn('username');
+            // $table->dropColumn('roles');
+            // $table->dropColumn('username');
         });
     }
 }
