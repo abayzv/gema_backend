@@ -11,21 +11,18 @@ class CreateTransactionsTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-
             $table->bigInteger('users_id');
-
-            $table->text('address')->nullable();
-
-            $table->float('total_price')->default(0);
-            $table->float('shipping_price')->default(0);
-            $table->string('status')->default('PENDING');
-
-            $table->string('payment')->default('MANUAL');
-
+            $table->string('payment_id');
+            $table->integer('project_id');
+            $table->integer('total_koin');
+            $table->integer('total_lot');
+            $table->integer('total_price');
+            $table->string('status');
             $table->softDeletes();
             $table->timestamps();
         });

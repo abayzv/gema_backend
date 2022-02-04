@@ -50,25 +50,31 @@ class TransactionController extends Controller
      */
     public function checkout(Request $request)
     {
-        $request->validate([
-            'items' => 'required|array',
-            'items.*.id' => 'exists:products,id',
-            'total_price' => 'required',
-            'shipping_price' => 'required',
-            'status' => 'required|in:PENDING,SUCCESS,CANCELLED,FAILED,SHIPPING,SHIPPED',
-        ]);
+        // return json_encode($request->all());
+        $check = Transaction::where('payment_id', $request->slug."2022")->first();
+        if($check === null){
+            $request->validate([
+                'idProject' => 'required|integer',
+                'jumlahKoin' => 'required|integer',
+                'jumlahLot' => 'required|integer',
+                'total' => 'required|integer',
+            ]);
+    
+            $transaction = Transaction::create([
+                'payment_id' => $request->slug."2022",
+                'users_id' => Auth::user()->id,
+                'project_id' => $request->idProject,
+                'total_koin' => $request->jumlahKoin,
+                'total_lot' => $request->jumlahLot,
+                'total_price' => $request->total,
+                'status' => "pending"
+            ]);
+    
+            return ResponseFormatter::success($transaction->load('items.product'), 'Transaksi berhasil');
+        
+        }else{
+            return response('Error', 409);
+        }
 
-        $payment_id = "CCF22354PLKAA234";
-
-        $transaction = Transaction::create([
-            'payment_id' => $payment_id,
-            'users_id' => Auth::user()->id,
-            'project_id' => $request->project_id,
-            'total_lot' => $request->address,
-            'total_price' => $request->total_price,
-            'status' => $request->status
-        ]);
-
-        return ResponseFormatter::success($transaction->load('items.product'), 'Transaksi berhasil');
-    }
+       }
 }
