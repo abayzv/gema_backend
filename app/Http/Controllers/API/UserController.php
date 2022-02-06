@@ -89,10 +89,10 @@ class UserController extends Controller
                     'region' => ['required', 'string'],
                     'post_code' => ['required', 'integer'],
                     'id_card_number' => ['required', 'string'],
-                    'id_card_path' => 'required|image|mimes:jpg,png,jpeg|max:1024|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
-                    'selfie_path' => 'required|image|mimes:jpg,png,jpeg|max:1024|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
+                    'id_card_path' => ['required','image','mimes:jpg,png,jpeg'],
+                    'selfie_path' => ['required','image','mimes:jpg,png,jpeg'],
                     'npwp_number' => ['required', 'string'],
-                    'npwp_path' => 'required|image|mimes:jpg,png,jpeg|max:1024|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
+                    'npwp_path' => ['required','image','mimes:jpg,png,jpeg'],
                     'account_number' => ['required', 'string'],
                     'bank_name' => ['required', 'string'],
                     'password' => ['required', 'string', new Password]
