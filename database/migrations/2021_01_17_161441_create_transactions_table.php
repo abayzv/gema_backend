@@ -22,6 +22,9 @@ class CreateTransactionsTable extends Migration
             $table->integer('total_koin');
             $table->integer('total_lot');
             $table->integer('total_price');
+            $table->boolean('is_member');
+            $table->integer('kode_unik');
+            $table->text('bukti_bayar');
             $table->string('status');
             $table->softDeletes();
             $table->timestamps();

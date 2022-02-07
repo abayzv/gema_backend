@@ -11,16 +11,16 @@ class Transaction extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'project_id','users_id', 'total_koin','total_lot', 'total_price', 'payment_id', 'status'
+        'project_id', 'users_id', 'total_koin', 'total_lot', 'total_price', 'payment_id', 'status', 'kode_unik', 'is_member', 'bukti_bayar'
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class, 'users_id', 'id');
     }
 
-    public function items()
+    public function project()
     {
-        return $this->hasMany(TransactionItem::class, 'transactions_id', 'id');
+        return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 }

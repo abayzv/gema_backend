@@ -30,6 +30,7 @@ class CreateUserDetailsTable extends Migration
             $table->string('account_name');
             $table->string('account_number');
             $table->string('bank_name');
+            $table->timestamp('member_activated_at')->nullable();
             $table->timestamps();
         });
     }
