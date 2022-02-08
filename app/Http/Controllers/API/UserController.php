@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Rules\Password;
+use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
@@ -26,6 +27,12 @@ class UserController extends Controller
     public function fetch(Request $request)
     {
         $user = User::with(['details'])->find(1);
+        return json_encode($user);
+        // return ResponseFormatter::success($request->user(), 'Data profile user berhasil diambil');
+    }
+    public function userlist(Request $request)
+    {
+        $user = User::with(['details'])->where('roles', 'user')->get();
         return json_encode($user);
         // return ResponseFormatter::success($request->user(), 'Data profile user berhasil diambil');
     }
@@ -124,6 +131,27 @@ class UserController extends Controller
                     'password' => Hash::make($request->password),
                 ]);
 
+                $user = User::with(['details'])->where('email', $request->email)->first();
+
+                $tokenResult = $user->createToken('authToken')->plainTextToken;
+
+                try {
+                    $details = [
+                        'name' => $request->name,
+                        'link_activation' => 'http://localhost:8000/mailactivate?name=' . $request->email . "&token=" . $tokenResult
+                    ];
+
+                    Mail::to($request->email)->send(new \App\Mail\MyTestMail($details));
+
+                    MailActivators::create([
+                        'name' => $request->email,
+                        'token' => $tokenResult,
+                    ]);
+                } catch (\Throwable $th) {
+                    $users->delete();
+                    return response('Email yang anda masukan tidak valid', 403);
+                }
+
                 UserDetails::create([
                     'user_id' => $users->id,
                     'mother_name' => $request->mother_name,
@@ -141,25 +169,6 @@ class UserController extends Controller
                     'account_number' => $request->account_number,
                     'bank_name' => $request->bank_name,
                 ]);
-
-                $user = User::with(['details'])->where('email', $request->email)->first();
-
-                $tokenResult = $user->createToken('authToken')->plainTextToken;
-
-
-
-                $details = [
-                    'name' => $request->name,
-                    'link_activation' => 'http://localhost:8000/mailactivate?name=' . $request->email . "&token=" . $tokenResult
-                ];
-
-                Mail::to($request->email)->send(new \App\Mail\MyTestMail($details));
-
-                MailActivators::create([
-                    'name' => $request->email,
-                    'token' => $tokenResult,
-                ]);
-
 
                 return ResponseFormatter::success([
                     'access_token' => $tokenResult,

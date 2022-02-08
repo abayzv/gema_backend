@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use App\Models\User;
+use App\Models\UserDetails;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,13 +70,17 @@ class TransactionController extends Controller
 
         $checkadmin = User::where('id', Auth::user()->id)->first();
 
-        if ($checkadmin->roles) {
+        if ($checkadmin->roles == "ADMIN") {
             $transaction = Transaction::find($request->input('id'));
             $transaction->status = 'paid';
             $transaction->save();
 
+            $userdetail = UserDetails::where('user_id', $transaction->users_id)->update([
+                'member_activated_at' => Carbon::now()->toDateTimeString()
+            ]);
+
             return ResponseFormatter::success(
-                $transaction,
+                [$userdetail, $request->input('id')],
                 'Data transaksi berhasil di approve'
             );
         } else {

@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('user', [UserController::class, 'fetch']);
     Route::post('user', [UserController::class, 'updateProfile']);
     Route::post('logout', [UserController::class, 'logout']);
+    Route::get('userlist', [UserController::class, 'userlist']);
 
     Route::get('transactions', [TransactionController::class, 'all']);
     Route::post('transaction/upload', [TransactionController::class, 'uploadBukti']);
