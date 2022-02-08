@@ -154,6 +154,7 @@ class UserController extends Controller
 
                 UserDetails::create([
                     'user_id' => $users->id,
+                    'member_id' => "GI" . "I" . substr($request->phone, -4) . str_pad($users->id, 5, '0', STR_PAD_LEFT),
                     'mother_name' => $request->mother_name,
                     'address' => $request->address,
                     'city' => $request->city,
